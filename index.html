@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maison Jacques & Cécile – Montgenèvre</title>
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+      color: #2c2c2c;
+      background: #fff;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    /* ===== COULEURS ===== */
+    :root {
+      --blue:    #1a3a5c;
+      --gold:    #c8973a;
+      --snow:    #f5f8fc;
+      --green:   #2e6b3e;
+      --light:   #ffffff;
+      --text:    #2c2c2c;
+      --muted:   #666;
+    }
+
+    /* ===== HEADER & NAV ===== */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(26,58,92,0.97);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 2rem;
+    }
+    .logo {
+      color: #fff;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+    .logo span { color: var(--gold); }
+    nav { display: flex; gap: 1.5rem; align-items: center; }
+    nav a {
+      color: rgba(255,255,255,0.88);
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--gold); }
+    .lang-switcher { display: flex; gap: 0.4rem; margin-left: 1rem; }
+    .lang-switcher button {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.35);
+      color: rgba(255,255,255,0.75);
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .lang-switcher button.active,
+    .lang-switcher button:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #fff;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(160deg, #1a3a5c 0%, #0d2540 60%, #1a3a5c 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('img/maison/hero.jpg') center/cover no-repeat;
+      opacity: 0.28;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 750px; }
+    .hero-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      color: #fff;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+    .hero h1 span { color: var(--gold); }
+    .hero-sub {
+      color: rgba(255,255,255,0.7);
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+    }
+    .hero-location {
+      color: rgba(255,255,255,0.9);
+      font-size: 1rem;
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .hero-location svg { width: 16px; height: 16px; fill: var(--gold); flex-shrink: 0; }
+    .hero-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.8rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary { background: var(--gold); color: #fff; }
+    .btn-primary:hover { background: #b5832e; }
+    .btn-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.6); }
+    .btn-outline:hover { background: rgba(255,255,255,0.12); }
+
+    /* ===== SEASON TOGGLE ===== */
+    .season-bar {
+      background: var(--snow);
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      border-bottom: 1px solid #dde5f0;
+    }
+    .season-btn {
+      padding: 1rem 2.5rem;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+    }
+    .season-btn.active { color: var(--blue); border-bottom-color: var(--gold); background: #fff; }
+
+    /* ===== SECTIONS ===== */
+    section { padding: 5rem 2rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 800;
+      color: var(--blue);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    .section-text { color: var(--muted); line-height: 1.8; max-width: 680px; }
+
+    /* ===== SAISON CONTENT ===== */
+    .season-content { display: none; }
+    .season-content.active { display: block; }
+
+    /* ===== ATOUTS GRID ===== */
+    .atouts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .atout-card {
+      background: var(--snow);
+      border-radius: 10px;
+      padding: 1.75rem 1.5rem;
+      border: 1px solid #dde5f0;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .atout-card:hover { box-shadow: 0 6px 24px rgba(26,58,92,0.1); transform: translateY(-3px); }
+    .atout-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .atout-card h3 { font-size: 1rem; font-weight: 700; color: var(--blue); margin-bottom: 0.5rem; }
+    .atout-card p { font-size: 0.875rem; color: var(--muted); line-height: 1.6; }
+
+    /* ===== MAISON SECTION ===== */
+    .maison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .maison-img-placeholder {
+      background: linear-gradient(135deg, #dde5f0, #c5d5e8);
+      border-radius: 12px;
+      height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--blue);
+      font-size: 0.85rem;
+      font-weight: 600;
+      opacity: 0.7;
+    }
+    .appart-cards { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+    .appart-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      background: var(--snow);
+      border-radius: 8px;
+      border: 1px solid #dde5f0;
+      transition: box-shadow 0.2s;
+    }
+    .appart-card:hover { box-shadow: 0 4px 16px rgba(26,58,92,0.08); }
+    .appart-card a { display: contents; }
+    .appart-num {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 1rem; flex-shrink: 0;
+    }
+    .appart-num.location { background: var(--gold); color: #fff; }
+    .appart-num.famille { background: var(--blue); color: #fff; }
+    .appart-info h4 { font-size: 0.95rem; font-weight: 700; color: var(--blue); }
+    .appart-info p { font-size: 0.82rem; color: var(--muted); }
+
+    /* ===== CONTACT ===== */
+    .contact-section { background: var(--blue); color: #fff; }
+    .contact-section .section-title { color: #fff; }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .contact-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      padding: 1.5rem;
+      display: flex; gap: 1rem; align-items: flex-start;
+      transition: background 0.2s;
+    }
+    .contact-card:hover { background: rgba(255,255,255,0.14); }
+    .contact-icon { font-size: 1.6rem; flex-shrink: 0; }
+    .contact-card h4 { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold); margin-bottom: 0.3rem; }
+    .contact-card p, .contact-card a { font-size: 0.95rem; color: rgba(255,255,255,0.9); }
+    .contact-card a:hover { color: var(--gold); }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #0d1f35;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 1.75rem 2rem;
+      font-size: 0.82rem;
+    }
+    footer span { color: var(--gold); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      nav .nav-links { display: none; }
+      .maison-grid { grid-template-columns: 1fr; gap: 2rem; }
+      header { padding: 0.75rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <div class="logo">Jacques <span>&</span> Cécile<br><small style="font-weight:400;font-size:0.72rem;color:rgba(255,255,255,0.6);">Montgenèvre · 05100</small></div>
+  <nav>
+    <div class="nav-links" style="display:flex;gap:1.5rem;">
+      <a href="#maison" data-i18n="nav_maison">La maison</a>
+      <a href="#station" data-i18n="nav_station">La station</a>
+      <a href="#appartements" data-i18n="nav_apparts">Appartements</a>
+      <a href="#contact" data-i18n="nav_contact">Contact</a>
+    </div>
+    <div class="lang-switcher">
+      <button onclick="setLang('fr')" id="btn-fr" class="active">FR</button>
+      <button onclick="setLang('en')" id="btn-en">EN</button>
+      <button onclick="setLang('it')" id="btn-it">IT</button>
+    </div>
+  </nav>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge" data-i18n="hero_badge">Maison de village – Alpes du Sud</div>
+    <h1>Maison <span>Jacques & Cécile</span></h1>
+    <p class="hero-sub" data-i18n="hero_sub">Montgenèvre · 05100 · France</p>
+    <div class="hero-location">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      <span data-i18n="hero_location">336 rue de l'Église – face à l'église – 150 m des pistes</span>
+    </div>
+    <div class="hero-cta">
+      <a href="#appartements" class="btn btn-primary" data-i18n="hero_btn1">Voir les appartements</a>
+      <a href="#contact" class="btn btn-outline" data-i18n="hero_btn2">Nous contacter</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SEASON TOGGLE ===== -->
+<div class="season-bar">
+  <button class="season-btn active" onclick="setSeason('hiver')" id="btn-hiver" data-i18n="season_hiver">❄️ Hiver</button>
+  <button class="season-btn" onclick="setSeason('ete')" id="btn-ete" data-i18n="season_ete">☀️ Été</button>
+</div>
+
+<!-- ===== STATION ===== -->
+<section id="station" style="background:#fff;">
+  <div class="container">
+    <p class="section-tag" data-i18n="station_tag">La station</p>
+    <h2 class="section-title" data-i18n="station_title">Montgenèvre, doyenne des stations françaises</h2>
+
+    <!-- HIVER -->
+    <div class="season-content active" id="season-hiver">
+      <p class="section-text" data-i18n="station_hiver_text">
+        Fondée en 1907, Montgenèvre est la plus ancienne station de ski de France. À 1 860 m d'altitude, elle bénéficie d'un enneigement exceptionnel et d'un ensoleillement remarquable — caractéristiques des Alpes du Sud. Site retenu pour les <strong>Jeux Olympiques d'Hiver 2030</strong>, la station est à la fois familiale et dynamique. Son domaine skiable, <em>La Voie Lactée</em>, est partagé avec plusieurs stations italiennes (Clavière, Cesana, Sestrières, Sauze d'Oulx…) et offre plus de 400 km de pistes.
+      </p>
+      <div class="atouts-grid">
+        <div class="atout-card">
+          <div class="atout-icon">⛷️</div>
+          <h3 data-i18n="atout_h1">La Voie Lactée</h3>
+          <p data-i18n="atout_p1">400+ km de pistes franco-italiennes, accessible à pied depuis la maison en moins de 2 minutes.</p>
+        </div>
+        <div class="atout-card">
+          <div class="atout-icon">🏔️</div>
+          <h3 data-i18n="atout_h2">1 860 m d'altitude</h3>
+          <p data-i18n="atout_p2">Enneigement garanti, soleil généreux, qualité de neige exceptionnelle tout l'hiver.</p>
+        </div>
+        <div class="atout-card">
+          <div class="atout-icon">👨‍👩‍👧</div>
+          <h3 data-i18n="atout_h3">Station familiale</h3>
+          <p data-i18n="atout_p3">Écoles de ski, garderie, cabinet médical, commerces — tout à portée de main depuis la rue de l'Église.</p>
+        </div>
+        <div class="atout-card">
+          <div class="atout-icon">🏅</div>
+          <h3 data-i18n="atout_h4">JO 2030</h3>
+          <p data-i18n="atout_p4">Montgenèvre accueillera des épreuves des Jeux Olympiques d'hiver 2030 — une station en plein essor.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ÉTÉ -->
+    <div class="season-content" id="season-ete">
+      <p class="section-text" data-i18n="station_ete_text">
+        L'été, Montgenèvre se transforme en paradis pour les amoureux de la nature et de la montagne. Randonnées, VTT, parapente, pêche en lac d'altitude… La frontière italienne est à quelques pas, et les grandes villes italiennes sont étonnamment proches : <strong>Turin à 1h30, Milan à 3h</strong>. Un point de départ idéal pour explorer les Alpes franco-italiennes et la culture italienne.
+      </p>
+      <div class="atouts-grid">
+        <div class="atout-card">
+          <div class="atout-icon">🥾</div>
+          <h3 data-i18n="atout_ete_h1">Randonnées & Nature</h3>
+          <p data-i18n="atout_ete_p1">Des dizaines de sentiers balisés, lacs d'altitude, faune alpine — un terrain de jeu immense.</p>
+        </div>
+        <div class="atout-card">
+          <div class="atout-icon">🇮🇹</div>
+          <h3 data-i18n="atout_ete_h2">Porte de l'Italie</h3>
+          <p data-i18n="atout_ete_p2">Turin à 1h30, Milan à 3h. Profitez de la montagne française et de la dolce vita italienne.</p>
+        </div>
+        <div class="atout-card">
+          <div class="atout-icon">☀️</div>
+          <h3 data-i18n="atout_ete_h3">Soleil des Alpes du Sud</h3>
+          <p data-i18n="atout_ete_p3">Plus de 300 jours de soleil par an. Une lumière et une douceur uniques en altitude.</p>
+        </div>
+        <div class="atout-card">
+          <div class="atout-icon">🚵</div>
+          <h3 data-i18n="atout_ete_h4">Sports & Loisirs</h3>
+          <p data-i18n="atout_ete_p4">VTT, parapente, pêche en lac, via ferrata, tennis — pour tous les niveaux et tous les âges.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LA MAISON ===== -->
+<section id="maison" style="background:var(--snow);">
+  <div class="container">
+    <div class="maison-grid">
+      <div>
+        <p class="section-tag" data-i18n="maison_tag">La maison</p>
+        <h2 class="section-title" data-i18n="maison_title">Une maison de village au cœur de Montgenèvre</h2>
+        <p class="section-text" data-i18n="maison_text">
+          Située au 336 rue de l'Église, face à l'église du village, la maison Jacques & Cécile est idéalement placée dans un environnement calme, à deux pas de tout. À 150 m des pistes, de la caisse des remontées mécaniques et des écoles de ski, elle conjugue tranquillité et accessibilité parfaite.
+        </p>
+        <p class="section-text" style="margin-top:1rem;" data-i18n="maison_text2">
+          La maison est composée de trois appartements indépendants sur trois niveaux. Deux appartements — au rez-de-chaussée et au deuxième étage — sont disponibles à la location saisonnière.
+        </p>
+      </div>
+      <div class="maison-img-placeholder" data-i18n="img_placeholder">
+        📷 Photo de la maison
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== APPARTEMENTS ===== -->
+<section id="appartements" style="background:#fff;">
+  <div class="container">
+    <p class="section-tag" data-i18n="appart_tag">Nos appartements</p>
+    <h2 class="section-title" data-i18n="appart_title">Choisissez votre appartement</h2>
+    <p class="section-text" data-i18n="appart_text">Deux appartements indépendants sont disponibles à la location. Cliquez sur l'un d'eux pour accéder aux photos, descriptions et au calendrier de réservation.</p>
+    <div class="appart-cards" style="margin-top:2.5rem;">
+
+      <a href="rdc.html">
+        <div class="appart-card">
+          <div class="appart-num location">RDC</div>
+          <div class="appart-info">
+            <h4 data-i18n="appart_rdc_title">Appartement Rez-de-Chaussée</h4>
+            <p data-i18n="appart_rdc_sub">Voir les photos, équipements et disponibilités →</p>
+          </div>
+        </div>
+      </a>
+
+      <div class="appart-card" style="opacity:0.6;cursor:default;">
+        <div class="appart-num famille">1er</div>
+        <div class="appart-info">
+          <h4 data-i18n="appart_1er_title">1er étage – Espace famille</h4>
+          <p data-i18n="appart_1er_sub">Réservé à la famille (accès privé)</p>
+        </div>
+      </div>
+
+      <a href="deuxieme.html">
+        <div class="appart-card">
+          <div class="appart-num location">2e</div>
+          <div class="appart-info">
+            <h4 data-i18n="appart_2e_title">Appartement 2ème étage</h4>
+            <p data-i18n="appart_2e_sub">Voir les photos, équipements et disponibilités →</p>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact" class="contact-section">
+  <div class="container">
+    <p class="section-tag" style="color:rgba(200,151,58,0.9);" data-i18n="contact_tag">Contact & Réservation</p>
+    <h2 class="section-title" data-i18n="contact_title">Réservez ou posez vos questions</h2>
+    <p class="section-text" style="color:rgba(255,255,255,0.7);" data-i18n="contact_text">
+      Pour toute demande de réservation ou d'information, contactez-nous par email, téléphone ou WhatsApp. Nous répondons dans les plus brefs délais.
+    </p>
+    <div class="contact-grid">
+      <a href="mailto:montgenevre.indivision.bouvet@gmail.com" class="contact-card">
+        <div class="contact-icon">📧</div>
+        <div>
+          <h4 data-i18n="contact_email_label">Email</h4>
+          <p>montgenevre.indivision<br>.bouvet@gmail.com</p>
+        </div>
+      </a>
+      <a href="tel:+33687534936" class="contact-card">
+        <div class="contact-icon">📞</div>
+        <div>
+          <h4 data-i18n="contact_tel_label">Téléphone</h4>
+          <p>06 87 53 49 36</p>
+        </div>
+      </a>
+      <a href="https://wa.me/33687534936" target="_blank" class="contact-card">
+        <div class="contact-icon">💬</div>
+        <div>
+          <h4>WhatsApp</h4>
+          <p data-i18n="contact_wa_text">Envoyer un message WhatsApp</p>
+        </div>
+      </a>
+      <div class="contact-card">
+        <div class="contact-icon">📍</div>
+        <div>
+          <h4 data-i18n="contact_adresse_label">Adresse</h4>
+          <p>Indivision Bouvet<br>336 rue de l'Église<br>05100 Montgenèvre</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>© 2025 <span>Maison Jacques & Cécile</span> · Montgenèvre · 05100 · Hautes-Alpes</p>
+</footer>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+  /* ---- TRADUCTIONS ---- */
+  const translations = {
+    fr: {
+      nav_maison: "La maison", nav_station: "La station", nav_apparts: "Appartements", nav_contact: "Contact",
+      hero_badge: "Maison de village – Alpes du Sud",
+      hero_sub: "Montgenèvre · 05100 · France",
+      hero_location: "336 rue de l'Église – face à l'église – 150 m des pistes",
+      hero_btn1: "Voir les appartements", hero_btn2: "Nous contacter",
+      season_hiver: "❄️ Hiver", season_ete: "☀️ Été",
+      station_tag: "La station",
+      station_title: "Montgenèvre, doyenne des stations françaises",
+      station_hiver_text: "Fondée en 1907, Montgenèvre est la plus ancienne station de ski de France. À 1 860 m d'altitude, elle bénéficie d'un enneigement exceptionnel et d'un ensoleillement remarquable — caractéristiques des Alpes du Sud. Site retenu pour les Jeux Olympiques d'Hiver 2030, la station est à la fois familiale et dynamique. Son domaine skiable, La Voie Lactée, est partagé avec plusieurs stations italiennes et offre plus de 400 km de pistes.",
+      station_ete_text: "L'été, Montgenèvre se transforme en paradis pour les amoureux de la nature et de la montagne. Randonnées, VTT, parapente, pêche en lac d'altitude… La frontière italienne est à quelques pas, et les grandes villes italiennes sont étonnamment proches : Turin à 1h30, Milan à 3h. Un point de départ idéal pour explorer les Alpes franco-italiennes.",
+      atout_h1: "La Voie Lactée", atout_p1: "400+ km de pistes franco-italiennes, à 150 m de la maison.",
+      atout_h2: "1 860 m d'altitude", atout_p2: "Enneigement garanti, soleil généreux, neige de qualité.",
+      atout_h3: "Station familiale", atout_p3: "Écoles de ski, garderie, médecin, commerces — tout à pied.",
+      atout_h4: "JO 2030", atout_p4: "Montgenèvre accueillera les Jeux Olympiques d'hiver 2030.",
+      atout_ete_h1: "Randonnées & Nature", atout_ete_p1: "Des dizaines de sentiers balisés, lacs d'altitude, faune alpine.",
+      atout_ete_h2: "Porte de l'Italie", atout_ete_p2: "Turin à 1h30, Milan à 3h. Montagne française, dolce vita italienne.",
+      atout_ete_h3: "Soleil des Alpes du Sud", atout_ete_p3: "Plus de 300 jours de soleil par an, une lumière unique.",
+      atout_ete_h4: "Sports & Loisirs", atout_ete_p4: "VTT, parapente, pêche, via ferrata, tennis — pour tous les âges.",
+      maison_tag: "La maison",
+      maison_title: "Une maison de village au cœur de Montgenèvre",
+      maison_text: "Située au 336 rue de l'Église, face à l'église du village, la maison Jacques & Cécile est idéalement placée dans un environnement calme, à deux pas de tout. À 150 m des pistes, de la caisse des remontées et des écoles de ski.",
+      maison_text2: "La maison est composée de trois appartements indépendants. Deux sont disponibles à la location saisonnière.",
+      img_placeholder: "📷 Photo de la maison",
+      appart_tag: "Nos appartements", appart_title: "Choisissez votre appartement",
+      appart_text: "Deux appartements indépendants sont disponibles à la location. Cliquez pour accéder aux photos et au calendrier.",
+      appart_rdc_title: "Appartement Rez-de-Chaussée", appart_rdc_sub: "Voir les photos, équipements et disponibilités →",
+      appart_1er_title: "1er étage – Espace famille", appart_1er_sub: "Réservé à la famille (accès privé)",
+      appart_2e_title: "Appartement 2ème étage", appart_2e_sub: "Voir les photos, équipements et disponibilités →",
+      contact_tag: "Contact & Réservation", contact_title: "Réservez ou posez vos questions",
+      contact_text: "Pour toute demande de réservation ou d'information, contactez-nous par email, téléphone ou WhatsApp.",
+      contact_email_label: "Email", contact_tel_label: "Téléphone",
+      contact_wa_text: "Envoyer un message WhatsApp", contact_adresse_label: "Adresse",
+    },
+    en: {
+      nav_maison: "The house", nav_station: "The resort", nav_apparts: "Apartments", nav_contact: "Contact",
+      hero_badge: "Village house – Southern Alps",
+      hero_sub: "Montgenèvre · 05100 · France",
+      hero_location: "336 rue de l'Église – facing the church – 150 m from the slopes",
+      hero_btn1: "View apartments", hero_btn2: "Contact us",
+      season_hiver: "❄️ Winter", season_ete: "☀️ Summer",
+      station_tag: "The resort",
+      station_title: "Montgenèvre, France's oldest ski resort",
+      station_hiver_text: "Founded in 1907, Montgenèvre is France's oldest ski resort. At 1,860 m altitude, it enjoys exceptional snowfall and remarkable sunshine — hallmarks of the Southern Alps. Selected as a venue for the 2030 Winter Olympics, the resort is both family-friendly and dynamic. Its ski area, the Milky Way (Voie Lactée), is shared with several Italian resorts and offers over 400 km of slopes.",
+      station_ete_text: "In summer, Montgenèvre transforms into a paradise for nature and mountain lovers. Hiking, mountain biking, paragliding, high-altitude fishing… The Italian border is just steps away, and major Italian cities are surprisingly close: Turin 1.5 hrs away, Milan 3 hrs. The perfect base to explore the Franco-Italian Alps.",
+      atout_h1: "The Milky Way", atout_p1: "400+ km of French-Italian slopes, 150 m from the house.",
+      atout_h2: "1,860 m altitude", atout_p2: "Guaranteed snow, generous sunshine, exceptional snow quality.",
+      atout_h3: "Family resort", atout_p3: "Ski schools, childcare, doctor, shops — all within walking distance.",
+      atout_h4: "2030 Olympics", atout_p4: "Montgenèvre will host events at the 2030 Winter Olympics.",
+      atout_ete_h1: "Hiking & Nature", atout_ete_p1: "Dozens of marked trails, mountain lakes, alpine wildlife.",
+      atout_ete_h2: "Gateway to Italy", atout_ete_p2: "Turin 1.5 hrs, Milan 3 hrs. French mountains, Italian lifestyle.",
+      atout_ete_h3: "Southern Alps sunshine", atout_ete_p3: "Over 300 sunny days a year — unique mountain light.",
+      atout_ete_h4: "Sports & Activities", atout_ete_p4: "Mountain biking, paragliding, fishing, via ferrata, tennis.",
+      maison_tag: "The house",
+      maison_title: "A village house in the heart of Montgenèvre",
+      maison_text: "Located at 336 rue de l'Église, opposite the village church, the Jacques & Cécile house is ideally situated in a quiet setting, steps from everything. 150 m from the slopes, ski lifts and ski schools.",
+      maison_text2: "The house comprises three independent apartments across three floors. Two are available for seasonal rental.",
+      img_placeholder: "📷 Photo of the house",
+      appart_tag: "Our apartments", appart_title: "Choose your apartment",
+      appart_text: "Two independent apartments are available to rent. Click to view photos and the booking calendar.",
+      appart_rdc_title: "Ground Floor Apartment", appart_rdc_sub: "View photos, amenities and availability →",
+      appart_1er_title: "1st floor – Family space", appart_1er_sub: "Reserved for family (private access)",
+      appart_2e_title: "2nd Floor Apartment", appart_2e_sub: "View photos, amenities and availability →",
+      contact_tag: "Contact & Booking", contact_title: "Book or ask us anything",
+      contact_text: "For any booking enquiry or information, contact us by email, phone or WhatsApp.",
+      contact_email_label: "Email", contact_tel_label: "Phone",
+      contact_wa_text: "Send a WhatsApp message", contact_adresse_label: "Address",
+    },
+    it: {
+      nav_maison: "La casa", nav_station: "La stazione", nav_apparts: "Appartamenti", nav_contact: "Contatto",
+      hero_badge: "Casa di paese – Alpi del Sud",
+      hero_sub: "Montgenèvre · 05100 · Francia",
+      hero_location: "336 rue de l'Église – di fronte alla chiesa – 150 m dalle piste",
+      hero_btn1: "Vedi gli appartamenti", hero_btn2: "Contattaci",
+      season_hiver: "❄️ Inverno", season_ete: "☀️ Estate",
+      station_tag: "La stazione",
+      station_title: "Montgenèvre, la più antica stazione sciistica francese",
+      station_hiver_text: "Fondata nel 1907, Montgenèvre è la più antica stazione sciistica di Francia. A 1.860 m di altitudine, gode di un innevamento eccezionale e di un soleggiamento straordinario — caratteristiche delle Alpi del Sud. Sede scelta per i Giochi Olimpici Invernali 2030, la stazione è allo stesso tempo familiare e dinamica. Il suo comprensorio sciistico, la Via Lattea, è condiviso con diverse stazioni italiane e offre oltre 400 km di piste.",
+      station_ete_text: "In estate, Montgenèvre si trasforma in un paradiso per gli amanti della natura e della montagna. Escursioni, mountain bike, parapendio, pesca nei laghi d'alta quota… Il confine italiano è a pochi passi, e le grandi città italiane sono sorprendentemente vicine: Torino a 1h30, Milano a 3h. La base ideale per esplorare le Alpi franco-italiane.",
+      atout_h1: "La Via Lattea", atout_p1: "400+ km di piste franco-italiane, a 150 m dalla casa.",
+      atout_h2: "1.860 m di quota", atout_p2: "Neve garantita, sole abbondante, qualità della neve eccezionale.",
+      atout_h3: "Stazione familiare", atout_p3: "Scuole di sci, asilo nido, medico, negozi — tutto a piedi.",
+      atout_h4: "Olimpiadi 2030", atout_p4: "Montgenèvre ospiterà gare delle Olimpiadi Invernali 2030.",
+      atout_ete_h1: "Escursioni & Natura", atout_ete_p1: "Decine di sentieri segnati, laghi d'alta quota, fauna alpina.",
+      atout_ete_h2: "Porta d'Italia", atout_ete_p2: "Torino a 1h30, Milano a 3h. Montagna francese, dolce vita italiana.",
+      atout_ete_h3: "Sole delle Alpi del Sud", atout_ete_p3: "Oltre 300 giorni di sole all'anno — una luce unica in quota.",
+      atout_ete_h4: "Sport & Attività", atout_ete_p4: "MTB, parapendio, pesca, via ferrata, tennis — per tutte le età.",
+      maison_tag: "La casa",
+      maison_title: "Una casa di paese nel cuore di Montgenèvre",
+      maison_text: "Situata al 336 rue de l'Église, di fronte alla chiesa del villaggio, la casa Jacques & Cécile è idealmente posizionata in un ambiente tranquillo, a due passi da tutto. A 150 m dalle piste, dalle casse degli impianti e dalle scuole di sci.",
+      maison_text2: "La casa è composta da tre appartamenti indipendenti su tre piani. Due sono disponibili per l'affitto stagionale.",
+      img_placeholder: "📷 Foto della casa",
+      appart_tag: "I nostri appartamenti", appart_title: "Scegli il tuo appartamento",
+      appart_text: "Due appartamenti indipendenti sono disponibili in affitto. Clicca per vedere le foto e il calendario prenotazioni.",
+      appart_rdc_title: "Appartamento Piano Terra", appart_rdc_sub: "Vedi foto, dotazioni e disponibilità →",
+      appart_1er_title: "1° piano – Spazio famiglia", appart_1er_sub: "Riservato alla famiglia (accesso privato)",
+      appart_2e_title: "Appartamento 2° Piano", appart_2e_sub: "Vedi foto, dotazioni e disponibilità →",
+      contact_tag: "Contatto & Prenotazione", contact_title: "Prenota o fai le tue domande",
+      contact_text: "Per qualsiasi richiesta di prenotazione o informazione, contattateci via email, telefono o WhatsApp.",
+      contact_email_label: "Email", contact_tel_label: "Telefono",
+      contact_wa_text: "Invia un messaggio WhatsApp", contact_adresse_label: "Indirizzo",
+    }
+  };
+
+  let currentLang = 'fr';
+
+  function setLang(lang) {
+    currentLang = lang;
+    const t = translations[lang];
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (t[key] !== undefined) el.textContent = t[key];
+    });
+    document.documentElement.lang = lang;
+    document.querySelectorAll('.lang-switcher button').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('btn-' + lang).classList.add('active');
+  }
+
+  /* ---- SEASON TOGGLE ---- */
+  function setSeason(season) {
+    document.querySelectorAll('.season-content').forEach(el => el.classList.remove('active'));
+    document.getElementById('season-' + season).classList.add('active');
+    document.querySelectorAll('.season-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('btn-' + season).classList.add('active');
+  }
+</script>
+
+</body>
+</html>
